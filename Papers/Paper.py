@@ -7,10 +7,12 @@ class Paper:
     
     def __init__(self):
         self.JournalFrom = ""
-        self.PublishingGroup = ""
+        self.Publisher = ""
         self.Title = ""
         self.DxUrl = ""
+        self.Type = ""
         self.Authors = [ ]
+        self.References = [ ]
 
 if __name__ == "__main__":
     print "Testing Paper:\n"
