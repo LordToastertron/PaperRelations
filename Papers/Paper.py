@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # Paper.py
+# created: nathan dotz - nathan (dot) dotz (at) gmail (dot) com
+# license: GNU GPL3 - see LICENSE file for details
 #
-
 # base class for all Paper types 
 class Paper:
     
