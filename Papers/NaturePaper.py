@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 #
 # NaturePaper.py
-#
-#
-
 
 # class for dealing with papers from nature publishing group.
 
