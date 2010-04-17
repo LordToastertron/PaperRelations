@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 #
 # NaturePaper.py
-
+# created: nathan dotz - nathan (dot) dotz (at) gmail (dot) com
+# license: GNU GPL3 - see LICENSE file for details
+#
 # class for dealing with papers from nature publishing group.
-
 # nature citations come in two files. one citation file, and one references
 # file, both with the same format.
 

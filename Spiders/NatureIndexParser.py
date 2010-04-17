@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-
-# for i in range (1,500):
-# 	url = 'http://dx.doi.org/10.1038/nbt.' + str(i)	
-# 	c.append( (url, urllib2.urlopen(url).read()) )	#store tuples of url / contents
-# 	time.sleep(3)
+#
+# 
+#
+# Grabs the set of links from an index page of Nature-type articles
+# to be used to spider for other citations
+#
 
 import sgmllib, re
 
