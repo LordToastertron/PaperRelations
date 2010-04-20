@@ -6,7 +6,7 @@
 
 from NatureIndexParser import NatureIndexParser
 from NatureIssueParser import NatureIssueParser
-import urllib
+import urllib, random
 
 class NatureSpider:
 
@@ -34,16 +34,28 @@ class NatureSpider:
         self.issues.append(i)
 
     def idxlinks(self):
+        random.shuffle(self.idxparser.links)
         return self.idxparser.links
+
+    def readIssues(self):
+        i = 0
+        for l in self.idxlinks():
+            if i > 10:
+                break
+            self.readIssue('http://www.nature.com'+l)
+            i += 1
+
+    def articlelinks(self):
+        a = []
+        for i in self.issues:
+            for l in i.links:
+                a.append(l)
+        return a
+
+    
 
 if __name__ == '__main__':
     n = NatureSpider()
     n.readIndex('http://www.nature.com/nbt/archive/index.html')
-    i = 0
-    for l in n.idxlinks():
-        if i > 10:
-            break
-        n.readIssue('http://www.nature.com'+l)
-        i += 1
-    for i in n.issues:
-        print i.links
+    n.readIssues()
+    print sorted(n.articlelinks())
