@@ -13,6 +13,6 @@ class NatureIndexParser(Parser):
 
     def start_a(self,attrs):
         for prop, value in attrs:
-            if prop == "href" and re.search("^/nbt/journal/v[0-9]", value) != None:
+            if prop == "href" and re.search("/journal/v[0-9]", value) != None:
                 self.links.append(value)
 

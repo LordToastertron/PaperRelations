@@ -13,6 +13,7 @@ class NatureSpider:
     def __init__(self):
         self.idxparser = NatureIndexParser()
         self.issues = []
+        self.refFiles = []
 
     def readIndex(self, resourceName):
         "Reads a resource to parse for links to issues. This should be a "
@@ -42,7 +43,9 @@ class NatureSpider:
         for l in self.idxlinks():
             if i > 10:
                 break
-            self.readIssue('http://www.nature.com'+l)
+            issUrl = 'http://www.nature.com'+l
+            print issUrl
+            self.readIssue(issUrl)
             i += 1
 
     def articlelinks(self):
@@ -55,7 +58,10 @@ class NatureSpider:
     
 
 if __name__ == '__main__':
+    prefix = 'nbt';
     n = NatureSpider()
-    n.readIndex('http://www.nature.com/nbt/archive/index.html')
+    urlstr = 'http://www.nature.com/'+prefix+'/archive/index.html'
+    print urlstr
+    n.readIndex(urlstr)
     n.readIssues()
     print sorted(n.articlelinks())
