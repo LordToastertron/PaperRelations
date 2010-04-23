@@ -11,5 +11,6 @@ class NatureArticleParser(Parser):
 
     def start_a(self,attrs):
         for prop, value in attrs:
-            if prop == "href" and re.search("/journal/v[0-9].*\.ris$", value) != None:
+            if prop == "href" and \
+            re.search("/journal/v[0-9].*\.ris$", value) != None:
                 self.links.append(value)
