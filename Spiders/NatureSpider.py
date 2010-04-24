@@ -65,12 +65,16 @@ class NatureSpider:
         i.parse(f.read())
         self.issues.append(i)
 
+<<<<<<< Updated upstream
     def readArticle(self):
         pass
 
     def idxlinks(self):
         "Return a list of links from the idxparser, randomized, so that "
         "site access is non-sequential"
+=======
+    def indexLinks(self):
+>>>>>>> Stashed changes
         random.shuffle(self.idxparser.links)
         return self.idxparser.links
 
@@ -78,9 +82,15 @@ class NatureSpider:
         "Loop over links provided in the idxparser, pushing NatureIssue "
         "instances onto self.issues via readIssue"
         i = 0
+<<<<<<< Updated upstream
         for l in self.idxlinks():
             if i > 10:              # stopgap for testing, so as not 
                 break               # to pull whole site ever time
+=======
+        for l in self.indexLinks():
+            if i > 10:
+                break
+>>>>>>> Stashed changes
             issUrl = 'http://www.nature.com'+l
             self.readIssue(issUrl)
             i += 1
@@ -101,7 +111,6 @@ if __name__ == '__main__':
     prefix = 'nbt';
     n = NatureSpider()
     urlstr = 'http://www.nature.com/'+prefix+'/archive/index.html'
-    print urlstr
     n.readIndex(urlstr)
     n.readIssues()
     print sorted(n.articlelinks())
