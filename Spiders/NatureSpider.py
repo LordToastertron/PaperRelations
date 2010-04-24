@@ -42,7 +42,7 @@ class NatureSpider:
     def __init__(self):
         self.idxparser = NatureIndexParser()
         self.issues = []
-        self.refFiles = []
+        self.articles = []
 
     def __getResource(self,resourceName):
         "Dynamically return a resource handle based on its name"
@@ -59,14 +59,20 @@ class NatureSpider:
         self.idxparser.parse(f.read())
 
     def readIssue(self, resourceName):
-        "Read a resource to fetch all links to article texts"
+        "Read a resource to fetch all links to article texts, and push it "
+        "on to the list of issues."
         i = NatureIssueParser()
         f = self.__getResource(resourceName)
         i.parse(f.read())
         self.issues.append(i)
 
-    def readArticle(self):
-        pass
+    def readArticle(self, resourceName):
+        "Read a resource to fetch all links to article reference files, "
+        "and push it on to a list of articles"
+        a = NatureArticleParser()
+        f = self.__getResource(resourceName)
+        a.parse(f.read())
+        self.articles.append(a)
 
     def indexLinks(self):
         "Return a list of links from the idxparser, randomized, so that "
@@ -74,26 +80,33 @@ class NatureSpider:
         random.shuffle(self.idxparser.links)
         return self.idxparser.links
 
-    def readIssues(self):
-        "Loop over links provided in the idxparser, pushing NatureIssue "
-        "instances onto self.issues via readIssue"
-        i = 0
-        for l in self.idxlinks():
-            if i > 10:              # stopgap for testing, so as not 
-                break               # to pull whole site ever time
-            issUrl = 'http://www.nature.com'+l
-            self.readIssue(issUrl)
-            i += 1
-
-    def articlelinks(self):
+    def articleLinks(self):
+        "Compile and return a randomized list of links to article pages "
+        "from the tree of links in issues"
         a = []
         for i in self.issues:
             for l in i.links:
                 a.append(l)
+        random.shuffle(a)
         return a
 
+    def readIssues(self):
+        "Loop over links provided in the idxparser, pushing NatureIssue "
+        "instances onto self.issues via readIssue"
+        i = 0
+        for l in self.indexLinks():
+            if i > 10:              # stopgap for testing, so as not 
+                break               # to pull whole site ever time
+            self.readIssue('http://www.nature.com'+l)
+            i += 1
+
+    def readArticles(self):
+        "Parse all articles queued in self.articleLinks() by "
+        "mapping self.readArticle"
+        for l in this.articleLinks():
+            self.readArticle('http://nature.com'+l)
+
     def fetchReferences(self):
-        #for 
         pass
     
 
@@ -103,4 +116,4 @@ if __name__ == '__main__':
     urlstr = 'http://www.nature.com/'+prefix+'/archive/index.html'
     n.readIndex(urlstr)
     n.readIssues()
-    print sorted(n.articlelinks())
+    print sorted(n.articleLinks())
