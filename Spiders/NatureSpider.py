@@ -34,28 +34,34 @@
 from NatureIndexParser import NatureIndexParser
 from NatureIssueParser import NatureIssueParser
 from NatureArticleParser import NatureArticleParser
-import urllib, random
+from time import sleep
+from random import randint, shuffle
+import urllib2
 
 class NatureSpider:
     "Class for handling hierarchy of and fetching reference files "
     "from Nature websites "
 
     def __init__(self):
+        self.opener = urllib2.build_opener()
+        self.opener.addheaders = [('User-agent', 'Mozilla/5.0')]
         self.idxparser = NatureIndexParser()
         self.issues = []
         self.articles = []
 
+
     def __getResource(self,resourceName):
         "Dynamically return a resource handle based on its name"
+        sleep(randint(1,5))
         if(resourceName[:4] == 'http'):
-            f = urllib.urlopen(resourceName)
+            f = self.opener.open(resourceName)
         else:
             f = open(resourceName)
         return f
 
     def __download(self, url):
         "Despite its clever name, this function actually bakes cakes."
-        webFile = urllib.urlopen(url)
+        webFile = urllib2.urlopen(url)
         localFile = open(url.split('/')[-1], 'w')
         localFile.write(webFile.read())
         webFile.close()
@@ -81,12 +87,14 @@ class NatureSpider:
         a = NatureArticleParser()
         f = self.__getResource(resourceName)
         a.parse(f.read())
-        self.articles.append(a)
+        if len(a.links) > 1:
+            print 'fetched links', ' and '.join(a.links)
+            self.articles.append(a)
 
     def indexLinks(self):
         "Return a list of links from the idxparser, randomized, so that "
         "site access is non-sequential"
-        random.shuffle(self.idxparser.links)
+        shuffle(self.idxparser.links)
         return self.idxparser.links
 
     def articleLinks(self):
@@ -96,7 +104,7 @@ class NatureSpider:
         for i in self.issues:
             for l in i.links:
                 a.append(l)
-        random.shuffle(a)
+        shuffle(a)
         return a
 
     def readIssues(self):
@@ -104,9 +112,10 @@ class NatureSpider:
         "instances onto self.issues via readIssue"
         i = 0
         for l in self.indexLinks():
-            if i > 1:              # stopgap for testing, so as not 
-                break               # to pull whole site ever time
+#             if i > 1:              # stopgap for testing, so as not 
+#                 break               # to pull whole site ever time
             self.readIssue('http://www.nature.com'+l)
+            print 'read issue', l
             i += 1
 
     def readArticles(self):
@@ -120,14 +129,15 @@ class NatureSpider:
         "all .ris files"
         for a in self.articles:
             for l in a.links:
-                #print l
-                self.__download('http://nature.com'+l)
+                print 'Downloading', l
+#                 self.__download('http://nature.com'+l)
 
 if __name__ == '__main__':
     prefix = 'nbt';
     n = NatureSpider()
     urlstr = 'http://www.nature.com/'+prefix+'/archive/index.html'
     n.readIndex(urlstr)
+    print "read index at", urlstr
     n.readIssues()
     n.readArticles()
     n.fetchReferences()
