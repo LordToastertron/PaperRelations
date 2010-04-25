@@ -33,6 +33,7 @@
 
 from NatureIndexParser import NatureIndexParser
 from NatureIssueParser import NatureIssueParser
+from NatureArticleParser import NatureArticleParser
 import urllib, random
 
 class NatureSpider:
@@ -51,6 +52,14 @@ class NatureSpider:
         else:
             f = open(resourceName)
         return f
+
+    def __download(self, url):
+        "Despite its clever name, this function actually bakes cakes."
+        webFile = urllib.urlopen(url)
+        localFile = open(url.split('/')[-1], 'w')
+        localFile.write(webFile.read())
+        webFile.close()
+        localFile.close()
 
     def readIndex(self, resourceName):
         "Reads a resource to parse for links to issues. This should be a "
@@ -95,20 +104,24 @@ class NatureSpider:
         "instances onto self.issues via readIssue"
         i = 0
         for l in self.indexLinks():
-            if i > 10:              # stopgap for testing, so as not 
+            if i > 1:              # stopgap for testing, so as not 
                 break               # to pull whole site ever time
             self.readIssue('http://www.nature.com'+l)
             i += 1
 
     def readArticles(self):
         "Parse all articles queued in self.articleLinks() by "
-        "mapping self.readArticle"
-        for l in this.articleLinks():
+        "mapping self.readArticle, filling up self.articles"
+        for l in self.articleLinks():
             self.readArticle('http://nature.com'+l)
 
     def fetchReferences(self):
-        pass
-    
+        "Iterate over a populated articles list, and download "
+        "all .ris files"
+        for a in self.articles:
+            for l in a.links:
+                #print l
+                self.__download('http://nature.com'+l)
 
 if __name__ == '__main__':
     prefix = 'nbt';
@@ -116,4 +129,6 @@ if __name__ == '__main__':
     urlstr = 'http://www.nature.com/'+prefix+'/archive/index.html'
     n.readIndex(urlstr)
     n.readIssues()
-    print sorted(n.articleLinks())
+    n.readArticles()
+    n.fetchReferences()
+
