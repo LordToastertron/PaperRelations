@@ -52,7 +52,7 @@ class NatureSpider:
 
     def __getResource(self,resourceName):
         "Dynamically return a resource handle based on its name"
-        sleep(randint(1,5))
+#         sleep(randint(1,5))
         if(resourceName[:4] == 'http'):
             f = self.opener.open(resourceName)
         else:
@@ -76,6 +76,7 @@ class NatureSpider:
     def readIssue(self, resourceName):
         "Read a resource to fetch all links to article texts, and push it "
         "on to the list of issues."
+        if resourceName == '': return
         i = NatureIssueParser()
         f = self.__getResource(resourceName)
         i.parse(f.read())
@@ -114,8 +115,9 @@ class NatureSpider:
         for l in self.indexLinks():
 #             if i > 1:              # stopgap for testing, so as not 
 #                 break               # to pull whole site ever time
+            print 'reading issue', l
+            if l[:4] == 'http': return
             self.readIssue('http://www.nature.com'+l)
-            print 'read issue', l
             i += 1
 
     def readArticles(self):
@@ -130,7 +132,7 @@ class NatureSpider:
         for a in self.articles:
             for l in a.links:
                 print 'Downloading', l
-#                 self.__download('http://nature.com'+l)
+                 self.__download('http://nature.com'+l)
 
 if __name__ == '__main__':
     prefix = 'nbt';
