@@ -132,7 +132,7 @@ class NatureSpider:
         for a in self.articles:
             for l in a.links:
                 print 'Downloading', l
-                 self.__download('http://nature.com'+l)
+                self.__download('http://nature.com'+l)
 
 if __name__ == '__main__':
     prefix = 'nbt';
