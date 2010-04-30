@@ -18,10 +18,8 @@ class NaturePaper(Paper):
         self.refFile = refFile
 
     def parseCitation(self, splitLinesFromCitation):
-        """
-        Takes a list of split lines from a citation file, and iterates
-        over them load the appropriate data
-        """
+        "Takes a list of split lines from a citation file, and iterates "
+        "over them load the appropriate data"
         for line in splitLinesFromCitation:
             if line.strip() == '':
                 continue
@@ -40,22 +38,22 @@ class NaturePaper(Paper):
                 self.Authors.append( (last,first))
 
     def loadCitFile(self, filename):
-        """Takes a filename, opens file, then sends the split """
-        """lines to parseCitation to load the current Paper's citation"""
+        "Takes a filename, opens file, then sends the split "
+        "lines to parseCitation to load the current Paper's citation"
         handle = open(filename, 'r')
         lines = handle.readlines()
         self.parseCitation(lines)
 
     def loadRefFile(self,filename):
-        """Takes a filename, opens file, splits on blank lines,"""
-        """ then splits again to create new objects via parseCitation """
+        "Takes a filename, opens file, splits on blank lines,"
+        " then splits again to create new objects via parseCitation"
         handle = open(filename, 'r')
         lines = handle.read().split("\n\n")
         for line in lines:
             tempPaper = NaturePaper()
             tempPaper.parseCitation(line.split("\n"))
             self.References.append(tempPaper)
-            
+
 
 if __name__ == '__main__':
     print "Testing NaturePaper:\n"
