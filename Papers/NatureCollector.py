@@ -8,8 +8,9 @@
 # creates NaturePaper objects, populated with data in a list
 # to insert into a relational database.
 
-import NaturePaper from NaturePaper
+from NaturePaper import NaturePaper
 import os
+import sys
 
 class NatureCollector:
 
@@ -25,4 +26,17 @@ class NatureCollector:
             if f.find('ref') > -1:
                 continue
             p = NaturePaper()
-            self.paperList.append()
+            print f
+            p.loadCitFile(self.path + f)
+            p.loadRefFile(self.path + f.replace('.','refs.'))
+            self.paperList.append(p)
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        print sys.argv[1]
+        nc = NatureCollector(sys.argv[1])
+    else:
+        nc = NatureCollector('.')
+    nc.loadPapers()
+    for i in nc.paperList:
+        print i.Title

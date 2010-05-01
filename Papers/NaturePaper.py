@@ -34,8 +34,8 @@ class NaturePaper(Paper):
             if head.strip() == "PB": self.PublishingGroup = info.strip()
             if head.strip() == "UR": self.DxUrl = info.strip()
             if head.strip() == "AU":
-                last,first = info.strip().split(',')
-                self.Authors.append( (last,first))
+                last,first = info.strip().split(',',1)
+                self.Authors.append((last,first))
 
     def loadCitFile(self, filename):
         "Takes a filename, opens file, then sends the split "
