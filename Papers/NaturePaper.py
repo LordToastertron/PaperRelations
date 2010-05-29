@@ -9,6 +9,7 @@
 # file, both with the same format.
 
 from Paper import Paper
+import re
 
 class NaturePaper(Paper):
 
@@ -41,14 +42,16 @@ class NaturePaper(Paper):
         "Takes a filename, opens file, then sends the split "
         "lines to parseCitation to load the current Paper's citation"
         handle = open(filename, 'r')
-        lines = handle.readlines()
+        lines = handle.read()
+        lines = lines.split("\n")
         self.parseCitation(lines)
 
     def loadRefFile(self,filename):
         "Takes a filename, opens file, splits on blank lines,"
         " then splits again to create new objects via parseCitation"
         handle = open(filename, 'r')
-        lines = handle.read().split("\n\n")
+        lines = handle.read()
+        lines = lines.split("\n\n")
         for line in lines:
             tempPaper = NaturePaper()
             tempPaper.parseCitation(line.split("\n"))
