@@ -31,9 +31,9 @@
 #
 # 
 
-from NatureIndexParser import NatureIndexParser
-from NatureIssueParser import NatureIssueParser
-from NatureArticleParser import NatureArticleParser
+from IndexParsers.NatureIndexParser import NatureIndexParser
+from IssueParsers.NatureIssueParser import NatureIssueParser
+from ArticleParsers.NatureArticleParser import NatureArticleParser
 from time import sleep
 from random import randint, shuffle
 import urllib2
@@ -52,7 +52,7 @@ class NatureSpider:
 
     def __getResource(self,resourceName):
         "Dynamically return a resource handle based on its name"
-#         sleep(randint(1,5))
+        sleep(randint(1,5))
         if(resourceName[:4] == 'http'):
             f = self.opener.open(resourceName)
         else:
@@ -113,8 +113,8 @@ class NatureSpider:
         "instances onto self.issues via readIssue"
         i = 0
         for l in self.indexLinks():
-#             if i > 1:              # stopgap for testing, so as not 
-#                 break               # to pull whole site ever time
+            if i > 1:              # stopgap for testing, so as not 
+                break               # to pull whole site ever time
             print 'reading issue', l
             if l[:4] == 'http': return
             self.readIssue('http://www.nature.com'+l)
