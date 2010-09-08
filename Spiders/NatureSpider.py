@@ -48,6 +48,7 @@ class NatureSpider:
         self.idxparser = NatureIndexParser()
         self.issues = []
         self.articles = []
+        self.download_dir = ''
 
 
     def __getResource(self,resourceName):
@@ -62,7 +63,7 @@ class NatureSpider:
     def __download(self, url):
         "Despite its clever name, this function actually bakes cakes."
         webFile = urllib2.urlopen(url)
-        localFile = open(url.split('/')[-1], 'w')
+        localFile = open(self.download_dir + url.split('/')[-1], 'w')
         localFile.write(webFile.read())
         webFile.close()
         localFile.close()
@@ -135,12 +136,18 @@ class NatureSpider:
                 self.__download('http://nature.com'+l)
 
 if __name__ == '__main__':
-    prefix = 'nbt';
-    n = NatureSpider()
-    urlstr = 'http://www.nature.com/'+prefix+'/archive/index.html'
-    n.readIndex(urlstr)
-    print "read index at", urlstr
-    n.readIssues()
-    n.readArticles()
-    n.fetchReferences()
+    prefixes = ['nbt']
+    print 'Currently checking prefixes:', " ".join(prefixes)
+    addit = raw_input('enter any additional prefixes: ').strip().split(' ')
+    if not addit == [''] : prefixes.extend(addit)
+    print 'Currently checking prefixes:', " ".join(prefixes)
+    for prefix in prefixes:
+        n = NatureSpider()
+        n.download_dir = raw_input('Specify a download prefix, or enter for none: ').strip()
+        urlstr = 'http://www.nature.com/'+prefix+'/archive/index.html'
+        n.readIndex(urlstr)
+        print "read index at", urlstr
+        n.readIssues()
+        n.readArticles()
+        n.fetchReferences()
 

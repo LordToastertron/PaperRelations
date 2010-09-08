@@ -67,7 +67,12 @@ class NaturePaper(Paper):
 
 
 if __name__ == '__main__':
-    filename = raw_input("Please enter a filename to parse:\n")
+    from sys import argv
+
+    if len(argv) > 1:
+        filename = argv[1]
+    else:
+        filename = raw_input("Please enter a filename to parse:\n")
     ref = filename.split('.ris')[0]
     np = NaturePaper(ref+'.ris',ref+'refs.ris')
     print np.Title, ' - ', np.Authors
